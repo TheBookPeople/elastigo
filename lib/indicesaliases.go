@@ -25,7 +25,7 @@ type JsonAliasAdd struct {
 }
 
 type JsonAliasRemove struct {
-	Add JsonAlias `json:"remove"`
+	Remove JsonAlias `json:"remove"`
 }
 
 type JsonAlias struct {
@@ -80,9 +80,9 @@ func (c *Conn) RemoveAlias(index string, alias string) (BaseResponse, error) {
 	}
 
 	jsonAliases := JsonAliases{}
-	jsonAliasAdd := JsonAliasRemove{}
-	jsonAliasAdd.Add.Alias = alias
-	jsonAliasAdd.Add.Index = index
+	jsonAliasRemove := JsonAliasRemove{}
+	jsonAliasRemove.Remove.Alias = alias
+	jsonAliasRemove.Remove.Index = index
 	jsonAliases.Actions = append(jsonAliases.Actions, JsonAliasRemove)
 	requestBody, err := json.Marshal(jsonAliases)
 
