@@ -83,7 +83,7 @@ func (c *Conn) RemoveAlias(index string, alias string) (BaseResponse, error) {
 	jsonAliasRemove := JsonAliasRemove{}
 	jsonAliasRemove.Remove.Alias = alias
 	jsonAliasRemove.Remove.Index = index
-	jsonAliases.Actions = append(jsonAliases.Actions, JsonAliasRemove)
+	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasRemove)
 	requestBody, err := json.Marshal(jsonAliases)
 
 	if err != nil {
