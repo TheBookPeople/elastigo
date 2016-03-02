@@ -17,14 +17,11 @@ import (
 )
 
 type JsonAliases struct {
-	Actions []JsonAliasAdd `json:"actions"`
+	Actions []JsonAliasAction `json:"actions"`
 }
 
-type JsonAliasAdd struct {
+type JsonAliasAction struct {
 	Add JsonAlias `json:"add"`
-}
-
-type JsonAliasRemove struct {
 	Remove JsonAlias `json:"remove"`
 }
 
@@ -45,10 +42,10 @@ func (c *Conn) AddAlias(index string, alias string) (BaseResponse, error) {
 	}
 
 	jsonAliases := JsonAliases{}
-	jsonAliasAdd := JsonAliasAdd{}
-	jsonAliasAdd.Add.Alias = alias
-	jsonAliasAdd.Add.Index = index
-	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasAdd)
+	jsonAliasAction := JsonAliasAction{}
+	jsonAliasAction.Add.Alias = alias
+	jsonAliasAction.Add.Index = index
+	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasAction)
 	requestBody, err := json.Marshal(jsonAliases)
 
 	if err != nil {
@@ -80,10 +77,10 @@ func (c *Conn) RemoveAlias(index string, alias string) (BaseResponse, error) {
 	}
 
 	jsonAliases := JsonAliases{}
-	jsonAliasRemove := JsonAliasRemove{}
-	jsonAliasRemove.Remove.Alias = alias
-	jsonAliasRemove.Remove.Index = index
-	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasRemove)
+	jsonAliasAction := JsonAliasAction{}
+	jsonAliasAction.Remove.Alias = alias
+	jsonAliasAction.Remove.Index = index
+	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasAction)
 	requestBody, err := json.Marshal(jsonAliases)
 
 	if err != nil {
