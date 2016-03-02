@@ -24,6 +24,10 @@ type JsonAliasAdd struct {
 	Add JsonAlias `json:"add"`
 }
 
+type JsonAliasRemove struct {
+	Add JsonAlias `json:"remove"`
+}
+
 type JsonAlias struct {
 	Index string `json:"index"`
 	Alias string `json:"alias"`
@@ -45,6 +49,41 @@ func (c *Conn) AddAlias(index string, alias string) (BaseResponse, error) {
 	jsonAliasAdd.Add.Alias = alias
 	jsonAliasAdd.Add.Index = index
 	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasAdd)
+	requestBody, err := json.Marshal(jsonAliases)
+
+	if err != nil {
+		return retval, err
+	}
+
+	body, err := c.DoCommand("POST", url, nil, requestBody)
+	if err != nil {
+		return retval, err
+	}
+
+	jsonErr := json.Unmarshal(body, &retval)
+	if jsonErr != nil {
+		return retval, jsonErr
+	}
+
+	return retval, err
+}
+
+// The API allows you to remove an index alias through an API.
+func (c *Conn) RemoveAlias(index string, alias string) (BaseResponse, error) {
+	var url string
+	var retval BaseResponse
+
+	if len(index) > 0 {
+		url = "/_aliases"
+	} else {
+		return retval, fmt.Errorf("You must specify an index to create the alias on")
+	}
+
+	jsonAliases := JsonAliases{}
+	jsonAliasAdd := JsonAliasRemove{}
+	jsonAliasAdd.Add.Alias = alias
+	jsonAliasAdd.Add.Index = index
+	jsonAliases.Actions = append(jsonAliases.Actions, JsonAliasRemove)
 	requestBody, err := json.Marshal(jsonAliases)
 
 	if err != nil {
