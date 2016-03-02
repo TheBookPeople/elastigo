@@ -16,12 +16,19 @@ import (
 	"fmt"
 )
 
-type JsonAliases struct {
-	Actions []JsonAliasAction `json:"actions"`
+type JsonAddAliases struct {
+	Actions []JsonAliasAdd `json:"actions"`
 }
 
-type JsonAliasAction struct {
+type JsonRemoveAliases struct {
+	Actions []JsonAliasRemove `json:"actions"`
+}
+
+type JsonAliasAdd struct {
 	Add JsonAlias `json:"add"`
+}
+
+type JsonAliasRemove struct {
 	Remove JsonAlias `json:"remove"`
 }
 
@@ -41,11 +48,11 @@ func (c *Conn) AddAlias(index string, alias string) (BaseResponse, error) {
 		return retval, fmt.Errorf("You must specify an index to create the alias on")
 	}
 
-	jsonAliases := JsonAliases{}
-	jsonAliasAction := JsonAliasAction{}
-	jsonAliasAction.Add.Alias = alias
-	jsonAliasAction.Add.Index = index
-	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasAction)
+	jsonAliases := JsonAddAliases{}
+	jsonAliasAdd := JsonAliasAdd{}
+	jsonAliasAdd.Add.Alias = alias
+	jsonAliasAdd.Add.Index = index
+	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasAdd)
 	requestBody, err := json.Marshal(jsonAliases)
 
 	if err != nil {
@@ -76,11 +83,11 @@ func (c *Conn) RemoveAlias(index string, alias string) (BaseResponse, error) {
 		return retval, fmt.Errorf("You must specify an index to create the alias on")
 	}
 
-	jsonAliases := JsonAliases{}
-	jsonAliasAction := JsonAliasAction{}
-	jsonAliasAction.Remove.Alias = alias
-	jsonAliasAction.Remove.Index = index
-	jsonAliases.Actions = append(jsonAliases.Actions, jsonAliasAction)
+	jsonAliases := JsonRemoveAliases{}
+	jsonAliasRemove := JsonAliasRemove{}
+	jsonAliasRemove.Remove.Alias = alias
+	jsonAliasRemove.Remove.Index = index
+	jsonAliases.Actions = append(jsonAliases.Actions, sonAliasRemove)
 	requestBody, err := json.Marshal(jsonAliases)
 
 	if err != nil {
